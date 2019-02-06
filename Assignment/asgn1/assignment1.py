@@ -1,6 +1,6 @@
 import numpy as np
 import time
-
+'''
 # - Fill in the code below the comment Python and NumPy same as in example.
 # - Follow instructions in document.
 ###################################################################
@@ -59,9 +59,9 @@ x_2 = None
 ##########################################################################################
 # 5. Create a vector of size 50 with values ranging from 50 to 99 and store in variable x.
 # Python
-
+x_1 = [m for m in range(50, 100)]
 # NumPy
-
+x_2 = np.arange(50,100)
 
 ##############
 print(x_1)
@@ -74,9 +74,9 @@ y_2 = None
 ##################################################################################
 # 6. Create a 4x4 matrix with values ranging from 0 to 15 and store in variable y.
 # Python
-
+[[x+y for x in range(4)] for y in range(0,16,4)]
 # NumPy
-
+y_2 = np.arange(16).reshape((4,4))
 
 ##############
 print(y_1)
@@ -89,15 +89,19 @@ tmp_2 = None
 ####################################################################################
 # 7. Create a 5x5 array with 1 on the border and 0 inside amd store in variable tmp.
 # Python
+tmp_1 = [[]] * 5
+tmp_1[0] = tmp_1[-1] = [1] * 5
+tmp_1[1:4] = [1,0,0,0,1]*3
 
 # NumPy
-
+tmp_2 = np.ones((5,5))
+tmp_2[1:4,1:4] = 0
 
 ##############
 print(tmp_1)
 print(tmp_2)
 ##############
-
+'''
 
 a_1 = None; a_2 = None
 b_1 = None; b_2 = None
@@ -105,20 +109,29 @@ c_1 = None; c_2 = None
 #############################################################################################
 # 8. Generate a 50x100 array of integer between 0 and 5,000 and store in variable a.
 # Python
-
+a_1 = [[x+y for x in range(100)] for y in range(0,5000,100)]
 # NumPy
-
+a_2 = np.arange(5000, dtype='int').reshape((50,100))
 
 ###############################################################################################
 # 9. Generate a 100x200 array of integer between 0 and 20,000 and store in variable b.
 # Python
-
+b_1 = [[x+y for x in range(200)] for y in range(0,20000,200)]
 # NumPy
-
+b_2 = np.arange(20000, dtype='int').reshape((100,200))
 
 #####################################################################################
 # 10. Multiply matrix a and b together (real matrix product) and store to variable c.
 # Python
+c_1 = []
+for a in a_1:
+    t = []
+    for b in b_1:
+        c = 0
+        for i in range(100):
+            c += a[i] + b[i]
+        t.append(c)
+    c_1.append(t)
 
 # NumPy
 
