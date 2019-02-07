@@ -124,17 +124,16 @@ b_2 = np.arange(20000, dtype='int').reshape((100,200))
 # 10. Multiply matrix a and b together (real matrix product) and store to variable c.
 # Python
 c_1 = []
-for a in a_1:
-    t = []
-    for b in b_1:
+for i in range(50):
+    r = []
+    for j in range(200):
         c = 0
-        for i in range(100):
-            c += a[i] + b[i]
-        t.append(c)
-    c_1.append(t)
-
+        for k in range(100):
+            c += a_1[i][k] * b_1[k][j]
+        r.append(c)
+    c_1.append(r)
 # NumPy
-
+c_2 = np.dot(a_2, b_2)
 
 d_1 = None; d_2 = None
 ################################################################################
@@ -173,9 +172,11 @@ e_1 = None; e_2 = None
 ###################################################################################
 # 14. Transpose matrix c, add 5 to all elements in matrix, and store to variable e.
 # Python
-
+e_1 = []
+for j in range(len(c_1[0])):
+    e_1.append([c_1[i][j] + 5 for i in range(len(c_1))])
 # NumPy
-
+e_2 = np.transpose(c_2) + 5
 
 ##################
 print (np.sum(e_1 == e_2))
@@ -187,3 +188,5 @@ print (np.sum(e_1 == e_2))
 # Python
 
 # NumPy
+f = e_2.reshape(10000)
+print(f.shape)
