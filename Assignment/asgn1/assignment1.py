@@ -124,11 +124,11 @@ b_2 = np.arange(20000, dtype='int').reshape((100,200))
 # 10. Multiply matrix a and b together (real matrix product) and store to variable c.
 # Python
 c_1 = []
-for i in range(50):
+for i in range(len(a_1)):
     r = []
-    for j in range(200):
+    for j in range(len(b_1[0])):
         c = 0
-        for k in range(100):
+        for k in range(len(a_1[0])):
             c += a_1[i][k] * b_1[k][j]
         r.append(c)
     c_1.append(r)
