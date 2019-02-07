@@ -49,7 +49,7 @@ print("\nc:")
 # for c in c_1:
 #     print(c)
 c_2 = np.dot(a_2, b_2)
-print(c_2)
+# print(c_2)
 # print(isEq(c_1, c_2))
 
 # z = sum([a*b for a, b in zip([1,2,3], [4,5,6])])
@@ -58,13 +58,22 @@ e_1 = []
 for j in range(len(c_1[0])):
     e_1.append([c_1[i][j] + 5 for i in range(len(c_1))])
 
+# print(c_2.size)
 
 e_2 = np.transpose(c_2) + 5
 print('\ne:')
-print(e_1)
+for e in e_1:
+    print(e)
 print()
 print(e_2)
 
-f = e_2.reshape(15)
 
+print('\nf:')
+f_1 = []
+for e in e_1:
+    f_1 += e
+print(np.shape(f_1))
+
+f_2 = e_2.reshape(15)
+print(f_2)
 

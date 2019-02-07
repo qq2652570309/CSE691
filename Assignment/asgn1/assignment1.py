@@ -186,7 +186,10 @@ print (np.sum(e_1 == e_2))
 #####################################################################################
 # 15. Reshape matrix e to 1d array, store to variable f, and print shape of f matrix.
 # Python
-
+f_1 = []
+for e in e_1:
+    f_1 += e
+print(np.shape(f_1))
 # NumPy
-f = e_2.reshape(10000)
-print(f.shape)
+f_2 = e_2.reshape(e_2.size)
+print(f_2.shape)
