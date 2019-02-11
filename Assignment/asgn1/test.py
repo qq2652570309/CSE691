@@ -76,7 +76,7 @@ print(np.shape(f_1))
 
 f_2 = e_2.reshape(15)
 print(f_2)
-'''
+
 
 x = np.random.rand(3,3)
 print(x)
@@ -87,5 +87,31 @@ x = (x-min)/(max-min)
 print(x)
 
 
+import random
 
 
+d_1 = [[random.random() for i in range(3)] for j in range(3)]
+min1 = d_1[0][0];
+max1 = d_1[0][0];
+for r in d_1:
+    min1 = min(min1, min(r))
+    max1 = max(max1, max(r))
+for i in range(len(d_1)):
+    for j in range(len(d_1[i])):
+        d_1[i][j] = (d_1[i][j]-min1)/(max1-min1)
+print(d_1)
+
+
+x = np.matrix(np.arange(12).reshape((3, 4)))
+print(x)
+
+x = x - x.mean(1)
+print(x)
+'''
+
+
+
+import matplotlib.pyplot as plt
+plt.plot([1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [5,4,3,2])
+plt.ylabel('some numbers')
+plt.show()

@@ -1,5 +1,6 @@
 import numpy as np
 import time
+import random
 '''
 # - Fill in the code below the comment Python and NumPy same as in example.
 # - Follow instructions in document.
@@ -111,14 +112,14 @@ c_1 = None; c_2 = None
 # Python
 a_1 = [[x+y for x in range(100)] for y in range(0,5000,100)]
 # NumPy
-a_2 = np.arange(5000, dtype='int').reshape((50,100))
+a_2 = np.matrix(np.arange(5000, dtype='int').reshape((50,100)))
 
 ###############################################################################################
 # 9. Generate a 100x200 array of integer between 0 and 20,000 and store in variable b.
 # Python
 b_1 = [[x+y for x in range(200)] for y in range(0,20000,200)]
 # NumPy
-b_2 = np.arange(20000, dtype='int').reshape((100,200))
+b_2 = np.matrix(np.arange(20000, dtype='int').reshape((100,200)))
 
 #####################################################################################
 # 10. Multiply matrix a and b together (real matrix product) and store to variable c.
@@ -139,7 +140,15 @@ d_1 = None; d_2 = None
 ################################################################################
 # 11. Normalize a 3x3 random matrix ((x-min)/(max-min)) and store to variable d.
 # Python
-
+d_1 = [[random.random() for i in range(3)] for j in range(3)]
+min1 = d_1[0][0];
+max1 = d_1[0][0];
+for r in d_1:
+    min1 = min(min1, min(r))
+    max1 = max(max1, max(r))
+for i in range(len(d_1)):
+    for j in range(len(d_1[i])):
+        d_1[i][j] = (d_1[i][j]-min1)/(max1-min1)
 # NumPy
 d_2 = np.random.rand(3,3)
 min2 = d_2.min()
@@ -147,24 +156,31 @@ max2 = d_2.max()
 d_2 = (d_2-min2)/(max2-min2)
 
 ##########
-print(d_1)
-print(d_2)
+# print(d_1)
+# print(d_2)
 #########
 
 
 ################################################
 # 12. Subtract the mean of each row of matrix a.
 # Python
-
+for i in range(len(a_1)):
+    mean = sum(a_1[i])/len(a_1[i])
+    for j in range(len(a_1[i])):
+        a_1[i][j] -= mean
 # NumPy
-
+a_2 = a_2 - a_2.mean(1)
+# print()
 
 ###################################################
 # 13. Subtract the mean of each column of matrix b.
 # Python
-
+for j in range(200):
+    mean = sum([b_1[i][j] for i in range(100)])/100
+    for i in range(100):
+        b_1[i][j] -= mean
 # NumPy
-
+b_2 = b_2 - b_2.mean(0)
 
 ################
 print(np.sum(a_1 == a_2))
@@ -196,3 +212,4 @@ print(np.shape(f_1))
 # NumPy
 f_2 = e_2.reshape(e_2.size)
 print(f_2.shape)
+
