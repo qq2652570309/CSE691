@@ -156,8 +156,8 @@ max2 = d_2.max()
 d_2 = (d_2-min2)/(max2-min2)
 
 ##########
-# print(d_1)
-# print(d_2)
+print(d_1)
+print(d_2)
 #########
 
 
@@ -208,8 +208,9 @@ print (np.sum(e_1 == e_2))
 f_1 = []
 for e in e_1:
     f_1 += e
-print(np.shape(f_1))
+f_1 = np.matrix(f_1)
 # NumPy
 f_2 = e_2.reshape(e_2.size)
-print(f_2.shape)
 
+print(f_1.shape)
+print(f_2.shape)
