@@ -16,7 +16,7 @@ tmp_2 = np.zeros(10)
 numPyEndTime = time.time()
 print('Python time: {0} sec.'.format(pythonEndTime-pythonStartTime))
 print('NumPy time: {0} sec.'.format(numPyEndTime-numPyStartTime))
-
+'''
 
 z_1 = None
 z_2 = None
@@ -101,7 +101,7 @@ tmp_2[1:4,1:4] = 0
 print(tmp_1)
 print(tmp_2)
 ##############
-'''
+
 
 a_1 = None; a_2 = None
 b_1 = None; b_2 = None
@@ -141,7 +141,10 @@ d_1 = None; d_2 = None
 # Python
 
 # NumPy
-
+d_2 = np.random.rand(3,3)
+min2 = d_2.min()
+max2 = d_2.max()
+d_2 = (d_2-min2)/(max2-min2)
 
 ##########
 print(d_1)

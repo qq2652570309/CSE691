@@ -1,5 +1,5 @@
 import numpy as np
-
+'''
 def isEq(x, y):
     a = np.sum(x == y)
     b = y.size
@@ -76,4 +76,16 @@ print(np.shape(f_1))
 
 f_2 = e_2.reshape(15)
 print(f_2)
+'''
+
+x = np.random.rand(3,3)
+print(x)
+# ((x-min)/(max-min))
+min = x.min()
+max = x.max()
+x = (x-min)/(max-min)
+print(x)
+
+
+
 
