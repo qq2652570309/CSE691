@@ -173,7 +173,7 @@ b = np.array([[2, 0],
 print(a*b)
 print(a.dot(b))
 print(np.dot(a, b))
-'''
+
 # Broadcasting
 x = np.array([[1, 2, 3],
               [4, 5, 6],
@@ -192,10 +192,10 @@ z = np.array([[1, 2, 3],
 
 print(z.T)
 '''
-print((z.T + y).T)
-print(x + np.reshape(y, (2, 1)))
-print(x * 2)
-'''
+f = np.arange(9).reshape((3,3))
+print(f.shape)
+f = f.reshape(f.size)
+print(f.shape)
 
 
 
