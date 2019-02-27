@@ -132,8 +132,8 @@ print ('\nFinding best model for Svm classifier')
 # - Store the best accuracy in bestAcc                                         #
 ################################################################################
 
-regularization_strength = [5e4, 5e5, 5e6, 5e7, 5e8]
-learning_rate = [1e-8, 1e-7, 1e-6, 1e-5]
+regularization_strength = [1000, 10000, 50000]
+learning_rate = [1e-7, 4e-7, 8e-7]
 
 for rs in regularization_strength:
     for lr in learning_rate:
@@ -145,6 +145,9 @@ for rs in regularization_strength:
             bestModel = classifier
         bestParameters = [lr,rs]
 
+
+
+pass
 ################################################################################
 #                              END OF YOUR CODE                                #
 ################################################################################
@@ -223,8 +226,9 @@ print ('\nFinding best model for Softmax classifier')
 # - Store the best accuracy in bestAcc                                         #
 ################################################################################
 
-regularization_strength = [5e4, 5e5, 5e6, 5e7, 5e8]
-learning_rate = [1e-8, 1e-7, 1e-6, 1e-5]
+
+regularization_strength = [1000, 10000, 50000]
+learning_rate = [1e-7, 4e-7, 8e-7]
 
 for rs in regularization_strength:
     for lr in learning_rate:
@@ -236,6 +240,9 @@ for rs in regularization_strength:
             bestModel = classifier
         bestParameters = [lr,rs]
 
+
+
+pass
 ################################################################################
 #                              END OF YOUR CODE                                #
 ################################################################################
@@ -250,5 +257,3 @@ if bestModel is not None:
 ######################################################################################################
 #                                END OF SOFTMAX CLASSIFIER                                           #
 ######################################################################################################
-
-
