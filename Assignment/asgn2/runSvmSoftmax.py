@@ -132,8 +132,8 @@ print ('\nFinding best model for Svm classifier')
 # - Store the best accuracy in bestAcc                                         #
 ################################################################################
 
-regularization_strength = [5e4, 5e5, 5e6, 5e7, 5e8]
-learning_rate = [1e-8, 1e-7, 1e-6, 1e-5]
+regularization_strength = 10 ** np.random.uniform(4,9,5)
+learning_rate = 10 ** np.random.uniform(-8,-3,5)
 
 for rs in regularization_strength:
     for lr in learning_rate:
@@ -223,8 +223,8 @@ print ('\nFinding best model for Softmax classifier')
 # - Store the best accuracy in bestAcc                                         #
 ################################################################################
 
-regularization_strength = [5e4, 5e5, 5e6, 5e7, 5e8]
-learning_rate = [1e-8, 1e-7, 1e-6, 1e-5]
+regularization_strength = 10 ** np.random.uniform(4,9,5)
+learning_rate = 10 ** np.random.uniform(-8,-3,5)
 
 for rs in regularization_strength:
     for lr in learning_rate:
