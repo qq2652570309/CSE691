@@ -17,10 +17,9 @@ class TwoLayersNN (object):
         #   with standard normal distribution and Standard deviation = 0.0001.  #
         #########################################################################
         self.params['w1'] = 0.0001 * np.random.randn(inputDim, hiddenDim)
-        self.params['b1'] = np.zeros(hiddenDim)
+        self.params['b1'] = np.ones(hiddenDim)
         self.params['w2'] = 0.0001 * np.random.randn(hiddenDim, outputDim)
-        self.params['b2'] = np.zeros(outputDim)
-
+        self.params['b2'] = np.ones(outputDim)
 
         #########################################################################
         #                       END OF YOUR CODE                                #
@@ -61,30 +60,46 @@ class TwoLayersNN (object):
         # - Do backward pass and calculate derivatives for each weight and bias     #
         #############################################################################
 
-        # Forward pass to calculate loss
-        tmp = x.dot(self.params['w1']) + self.params['b1']
-        hOutput = np.maximum(0.01 * tmp, tmp)
-        scores = hOutput.dot(self.params['w2']) + self.params['b2']
-        scores = np.maximum(0.01 * scores, scores)
-        scores -= np.max(scores, axis=1, keepdims=True)
-        scores = np.exp(scores)
-        scoresProbs = scores/np.sum(scores, axis=1, keepdims=True)
-        logProbs = -np.log(scoresProbs[np.arange(x.shape[0]), y])
-        loss = np.sum(logProbs) / x.shape[0]
-        loss += 0.5 * reg * np.sum(self.params['w1'] * self.params['w1']) + 0.5 * reg * np.sum(self.params['w2'] * self.params['w2'])
+        N = x.shape[0]
 
-        # Backward pass to calculate each gradient
-        dScoresProbs = scoresProbs
-        dScoresProbs[range(x.shape[0]), list(y)] -= 1
-        dScoresProbs /= x.shape[0]
-        grads['w2'] = hOutput.T.dot(dScoresProbs) + reg * self.params['w2']
-        grads['b2'] = np.sum(dScoresProbs, axis=0)
+        # Forward pass and calculate score
+        x_b = np.hstack((x, np.ones((N,1))))
+        u_b = np.vstack((self.params['w1'], self.params['b1']))
+        Hin = x_b.dot(u_b)
+        Hout = np.maximum(np.zeros(Hin.shape), Hin)
+        Hout_b = np.hstack((Hout, np.ones((Hout.shape[0],1))))
+        w2_b = np.vstack((self.params['w2'], self.params['b2']))
+        s = Hout_b.dot(w2_b)
 
-        dhOutput = dScoresProbs.dot(self.params['w2'].T)
-        dhOutputAct = (hOutput >= 0) * dhOutput + (hOutput < 0) * dhOutput * 0.01
-        grads['w1'] = x.T.dot(dhOutputAct) + reg * self.params['w1']
-        grads['b1'] = np.sum(dhOutputAct, axis=0)
+        # calculate probability
+        s = s - np.max(s, axis=1, keepdims=True)
+        exp_s = np.exp(s)
+        sum_s = np.sum(exp_s, axis=1, keepdims=True)
+        prob = exp_s / sum_s
 
+        # calculate loss
+        prob_correct = prob[np.arange(N), y]
+        loss = np.sum(-np.log(prob_correct)) / N
+        loss += 0.5 * reg * (np.sum(self.params['w1']**2) + np.sum(self.params['w2']**2))
+
+        # Backprogagation and calculate gradient
+        ind = np.zeros(prob.shape)
+        ind[np.arange(N), y] = 1
+        ds = prob - ind
+        dw2_b = Hout_b.T.dot(ds) / N
+        dHout = ds.dot(self.params['w2'].T)
+        dHin = np.zeros(dHout.shape)
+
+        for x, y in np.ndindex(Hin.shape):
+            if Hin[x, y] > 0:
+                dHin[x, y] = dHout[x, y]
+
+        dw1_b = x_b.T.dot(dHin) / N
+
+        grads['w2'] = dw2_b[0:-1] + 2 * reg * self.params['w2']
+        grads['b2'] = dw2_b[-1:].reshape(self.params['b2'].shape) + 2 * reg * self.params['b2']
+        grads['w1'] = dw1_b[0:-1] + 2 * reg * self.params['w1']
+        grads['b1'] = dw1_b[-1:].reshape(self.params['b1'].shape) + 2 * reg * self.params['b1']
 
         #############################################################################
         #                          END OF YOUR CODE                                 #
@@ -128,13 +143,16 @@ class TwoLayersNN (object):
             # Hint:                                                                 #
             # - Use np.random.choice                                                #
             #########################################################################
-            batchID = np.random.choice(x.shape[0], batchSize, replace=True)
-            xBatch = x[batchID]
-            yBatch = y[batchID]
+            R = np.random.choice(x.shape[0], batchSize, replace=True)
+            xBatch = x[R]
+            yBatch = y[R]
             loss, grads = self.calLoss(xBatch, yBatch, reg)
             lossHistory.append(loss)
-            self.params['w1']+= -lr * grads['w1']
+
+            self.params['w1'] += -lr * grads['w1']
             self.params['w2'] += -lr * grads['w2']
+            self.params['b2'] += -lr * grads['b2']
+            self.params['b1'] += -lr * grads['b1']
 
 
             #########################################################################
@@ -163,12 +181,16 @@ class TwoLayersNN (object):
         # TODO: 10 points                                                         #
         # -  Store the predict output in yPred                                    #
         ###########################################################################
-        tmp = x.dot(self.params['w1']) + self.params['b1']
-        hOutput = np.maximum(0.01 * tmp, tmp)
-        scores = hOutput.dot(self.params['w2']) + self.params['b2']
-        yPred = np.argmax(scores, axis=1)
+        # calculate score
+        x_b = np.hstack((x, np.ones((x.shape[0],1))))
+        u_b = np.vstack((self.params['w1'], self.params['b1']))
+        Hin = x_b.dot(u_b)
+        Hout = np.maximum(np.zeros(Hin.shape), Hin)
+        Hout_b = np.hstack((Hout, np.ones((Hout.shape[0],1))))
+        w2_b = np.vstack((self.params['w2'], self.params['b2']))
+        s = Hout_b.dot(w2_b)
 
-
+        yPred = np.argmax(s, axis=1)
 
         ###########################################################################
         #                           END OF YOUR CODE                              #
@@ -182,8 +204,13 @@ class TwoLayersNN (object):
         # TODO: 10 points                                                         #
         # -  Calculate accuracy of the predict value and store to acc variable    #
         ###########################################################################
-        acc = 100.0 * (np.sum(self.predict(x) == y) / float(x.shape[0]))
 
+         # calculate prediction of y
+        yPred = self.predict(x)
+        # calculate accuracy
+        result = y == yPred
+        acc = len(result[result == True]) / result.size
+        acc = acc * 100
 
 
         ###########################################################################
