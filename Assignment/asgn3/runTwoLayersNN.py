@@ -132,11 +132,13 @@ bestModel = None
 # - Store the best accuracy in bestAcc                                         #
 # - Best Model should get validation accuracy above 35%                        #
 ################################################################################
-# regularization_strength = [1000, 10000, 50000]
-# learning_rate = [1e-7, 4e-7, 8e-7]
+regularization_strength = [3e-3, 5e-3, 7e-3]
+learning_rate = [3e-3, 5e-3, 7e-3]
+# regularization_strength = np.arange(1e-3, 1e-2, 2e-3)
+# learning_rate = np.arange(1e-3, 1e-2, 2e-3)
 
-for lr in np.arange(1e-7, 1e-6, 1e-7):
-    for rs in np.arange(1e3, 5e4, 1e3):
+for rs in regularization_strength:
+    for lr in learning_rate:
         classifier = TwoLayersNN(xTrain.shape[1], hiddenNeurons, numClasses)
         classifier.train(xTrain, yTrain, lr, rs, iterations=1500 ,verbose=False)
         acc = classifier.calAccuracy(xVal, yVal)
