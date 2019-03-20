@@ -89,7 +89,8 @@ class TwoLayersNN (object):
         ds = prob - ind
         dw2_b = Hout_b.T.dot(ds) / N
         dHout = ds.dot(self.params['w2'].T)
-        dHin = (Hout >= 0) * dHout + (Hout < 0) * dHout * 0.01
+        dHin = (Hout >= 0) * dHout
+        dHin += (Hout < 0) * dHout * 0.01
         dw1_b = x_b.T.dot(dHin) / N
 
         # calculate gradient
