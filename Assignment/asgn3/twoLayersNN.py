@@ -16,10 +16,15 @@ class TwoLayersNN (object):
         # - By using dictionary (self.params) to store value                    #
         #   with standard normal distribution and Standard deviation = 0.0001.  #
         #########################################################################
-        self.params['w1'] = 0.0001 * np.random.randn(inputDim, hiddenDim)
-        self.params['b1'] = np.ones(hiddenDim)
-        self.params['w2'] = 0.0001 * np.random.randn(hiddenDim, outputDim)
-        self.params['b2'] = np.ones(outputDim)
+        # self.params['w1'] = 0.0001 * np.random.randn(inputDim, hiddenDim)
+        # self.params['b1'] = np.ones(hiddenDim)
+        # self.params['w2'] = 0.0001 * np.random.randn(hiddenDim, outputDim)
+        # self.params['b2'] = np.ones(outputDim)
+
+        self.params['w1'] = tf.Variable(tf.random_normal(mean=0.0, stddev=0.0001, shape=[inputDim, hiddenDim]))
+        self.params['b1'] = tf.Variable(tf.ones(hiddenDim))
+        self.params['w2'] = tf.Variable(tf.random_normal(mean=0.0, stddev=0.0001, shape=[hiddenDim, outputDim]))
+        self.params['b2'] = tf.Variable(tf.ones(outputDim))
 
         #########################################################################
         #                       END OF YOUR CODE                                #
@@ -66,13 +71,14 @@ class TwoLayersNN (object):
         x_b = np.hstack((x, np.ones((N,1))))
         u_b = np.vstack((self.params['w1'], self.params['b1']))
         Hin = x_b.dot(u_b)
-        Hout = np.maximum(np.zeros(Hin.shape), Hin)
+        Hout = np.maximum(0.01 * Hin, Hin)
         Hout_b = np.hstack((Hout, np.ones((Hout.shape[0],1))))
         w2_b = np.vstack((self.params['w2'], self.params['b2']))
         s = Hout_b.dot(w2_b)
+        s = np.maximum(0.01 * s, s)
+        s = s - np.max(s, axis=1, keepdims=True)
 
         # calculate probability
-        s = s - np.max(s, axis=1, keepdims=True)
         exp_s = np.exp(s)
         sum_s = np.sum(exp_s, axis=1, keepdims=True)
         prob = exp_s / sum_s
@@ -82,20 +88,16 @@ class TwoLayersNN (object):
         loss = np.sum(-np.log(prob_correct)) / N
         loss += 0.5 * reg * (np.sum(self.params['w1']**2) + np.sum(self.params['w2']**2))
 
-        # Backprogagation and calculate gradient
+        # Backprogagation
         ind = np.zeros(prob.shape)
         ind[np.arange(N), y] = 1
         ds = prob - ind
         dw2_b = Hout_b.T.dot(ds) / N
         dHout = ds.dot(self.params['w2'].T)
-        dHin = np.zeros(dHout.shape)
-
-        for x, y in np.ndindex(Hin.shape):
-            if Hin[x, y] > 0:
-                dHin[x, y] = dHout[x, y]
-
+        dHin = (Hout >= 0) * dHout + (Hout < 0) * dHout * 0.01
         dw1_b = x_b.T.dot(dHin) / N
 
+        # calculate gradient
         grads['w2'] = dw2_b[0:-1] + 2 * reg * self.params['w2']
         grads['b2'] = dw2_b[-1:].reshape(self.params['b2'].shape) + 2 * reg * self.params['b2']
         grads['w1'] = dw1_b[0:-1] + 2 * reg * self.params['w1']
