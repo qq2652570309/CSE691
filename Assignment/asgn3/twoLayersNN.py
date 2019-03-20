@@ -16,15 +16,10 @@ class TwoLayersNN (object):
         # - By using dictionary (self.params) to store value                    #
         #   with standard normal distribution and Standard deviation = 0.0001.  #
         #########################################################################
-        # self.params['w1'] = 0.0001 * np.random.randn(inputDim, hiddenDim)
-        # self.params['b1'] = np.ones(hiddenDim)
-        # self.params['w2'] = 0.0001 * np.random.randn(hiddenDim, outputDim)
-        # self.params['b2'] = np.ones(outputDim)
-
-        self.params['w1'] = tf.Variable(tf.random_normal(mean=0.0, stddev=0.0001, shape=[inputDim, hiddenDim]))
-        self.params['b1'] = tf.Variable(tf.ones(hiddenDim))
-        self.params['w2'] = tf.Variable(tf.random_normal(mean=0.0, stddev=0.0001, shape=[hiddenDim, outputDim]))
-        self.params['b2'] = tf.Variable(tf.ones(outputDim))
+        self.params['w1'] = 0.0001 * np.random.randn(inputDim, hiddenDim)
+        self.params['b1'] = np.ones(hiddenDim)
+        self.params['w2'] = 0.0001 * np.random.randn(hiddenDim, outputDim)
+        self.params['b2'] = np.ones(outputDim)
 
         #########################################################################
         #                       END OF YOUR CODE                                #
