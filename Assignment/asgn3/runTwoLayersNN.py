@@ -134,8 +134,6 @@ bestModel = None
 ################################################################################
 regularization_strength = [3e-3, 5e-3, 7e-3]
 learning_rate = [3e-3, 5e-3, 7e-3]
-# regularization_strength = np.arange(1e-3, 1e-2, 2e-3)
-# learning_rate = np.arange(1e-3, 1e-2, 2e-3)
 
 for rs in regularization_strength:
     for lr in learning_rate:
