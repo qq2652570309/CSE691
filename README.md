@@ -1,1 +1,1 @@
-# EDU691
+# CSE691 deep learning
