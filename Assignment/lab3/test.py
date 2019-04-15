@@ -1,18 +1,13 @@
-import numpy as np
 import tensorflow as tf
-import time
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
+with tf.device('/gpu:0'):
+  a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
+  b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2], name='b')
+  c = tf.matmul(a, b)
 
-def lrelu (tmp):
-  return tf.nn.relu(tmp) - 0.01 * tf.nn.relu(-tmp)
+# a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
+# b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2], name='b')
+# c = tf.matmul(a, b)
 
-Hin = np.array([[-0.5, 4],[-1.5, 5]])
-Hout = lrelu(Hin)
-
-sess = tf.Session()
-print(sess.run(Hout))
-
-
-
+with tf.Session() as sess:
+  print (sess.run(c))

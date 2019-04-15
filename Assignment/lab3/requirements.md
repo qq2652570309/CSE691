@@ -1,0 +1,5 @@
+numpy
+tensorflow==1.13.1
+tensorflow-gpu==1.13.1
+keras
+
